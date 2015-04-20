@@ -1,0 +1,17 @@
+{
+  "name": "webpack",
+  "version": "0.0.0",
+  "homepage": "https://github.com/otelnov/webpack-karma-babel",
+  "authors": [
+    "otelnov <otelnov@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {}
+}
