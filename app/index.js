@@ -25,8 +25,16 @@ ngModule.config(($stateProvider, $urlRouterProvider) => {
     .state('app.main', {
       url: '/',
       template: require('./components/main/main.html'),
-      controller: 'MainCtrl'
+      controller: 'MainCtrl',
+      controllerAs: 'vm'
+    })
+    .state('app.new', {
+      url: '/new',
+      template: require('./components/main/main.html'),
+      controller: 'NewCtrl',
+      controllerAs: 'vm'
     });
 });
 
+require('./directives')(ngModule);
 require('./components')(ngModule);
