@@ -9,8 +9,9 @@ module.exports = {
   },
 
   plugins: [
+    //new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
-      ON_TEST: process.env.NODE_ENV === 'test'
+      NODE_ENV: process.env.NODE_ENV === 'development'
     })
   ],
 

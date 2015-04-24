@@ -4,8 +4,10 @@ class MainCtrl {
     MainFactory.test(7);
     console.log('main');
   }
-
 }
 
 MainCtrl.$inject = ['MainFactory'];
-export default MainCtrl
+
+export default ngModule => {
+  ngModule.controller('MainCtrl', MainCtrl);
+}
