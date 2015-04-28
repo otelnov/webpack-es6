@@ -2,17 +2,21 @@ var webpack = require('webpack');
 
 module.exports = {
   context: __dirname + '/app',
-  entry: './index.js',
+  entry: {
+    comp1: './components/comp1/index.js',
+    comp2: './components/comp2/index.js',
+    common: './index.js'
+  },
   output: {
     path: __dirname + '/app',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
 
   plugins: [
-    //new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV: process.env.NODE_ENV === 'development'
-    })
+    }),
+    new webpack.optimize.CommonsChunkPlugin('common', 'common.js')
   ],
 
   module: {

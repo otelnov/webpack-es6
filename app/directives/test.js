@@ -1,20 +1,3 @@
-//export default ngModule => {
-//  ngModule.directive('test', () => {
-//    require('./test.css');
-//    return {
-//      restrict: 'E',
-//      scope: {},
-//      template: require('./test.html'),
-//      controllerAs: 'vm',
-//      controller: function () {
-//        const vm = this;
-//        vm.test = 'test';
-//      }
-//    }
-//  });
-//};
-
-
 class Test {
   constructor() {
     this.restrict = 'E';
@@ -22,13 +5,15 @@ class Test {
     this.template = require('./test.html');
     this.controllerAs = 'vm';
     this.controller = function () {
+      console.log('directive ctrl');
       const vm = this;
-      vm.test = 'test';
+      vm.test = 'ladirective';
     };
   }
 }
 
 export default ngModule => {
   require('./test.css');
-  ngModule.register.directive('test', Test)
+  let register = require('../register')(ngModule);
+  register.directive('test', Test)
 }
