@@ -3,8 +3,8 @@ var webpack = require('webpack');
 module.exports = {
   context: __dirname + '/app',
   entry: {
-    comp1: './components/comp1/index.js',
-    comp2: './components/comp2/index.js',
+    //comp1: './components/comp1/index.js',
+    //comp2: './components/comp2/index.js',
     common: './index.js'
   },
   output: {
