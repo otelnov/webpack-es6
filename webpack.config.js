@@ -27,6 +27,11 @@ module.exports = {
         exclude: /node_modules/
       },
       {
+        test: /\.js$/,
+        loader: 'eslint',
+        exclude: /node_modules/
+      },
+      {
         test: /\.html$/,
         loader: 'raw',
         exclude: /node_modules/

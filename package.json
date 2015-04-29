@@ -16,6 +16,7 @@
     "chai": "^2.2.0",
     "css-loader": "^0.10.1",
     "eslint": "^0.20.0",
+    "eslint-loader": "^0.11.1",
     "esprima-loader": "^0.9.0",
     "karma": "^0.12.31",
     "karma-chai": "^0.1.0",
