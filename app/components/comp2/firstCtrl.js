@@ -1,9 +1,8 @@
 class FirstCtrl {
-  constructor (){
-    console.log('first controller, second comp');
+  constructor() {
   }
 }
 
 export default ngModule => {
   ngModule.controller('FirstCtrl', FirstCtrl);
-}
+};

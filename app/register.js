@@ -1,75 +1,22 @@
-"use strict";
+'use strict';
 
 /**
  * A helper class to simplify registering Angular components and provide a consistent syntax for doing so.
  */
 
-var _applyConstructor = function (Constructor, args) {
+var applyConstructor = function (Constructor, args) {
   var instance = Object.create(Constructor.prototype);
 
   var result = Constructor.apply(instance, args);
 
-  return result != null && (typeof result == "object" || typeof result == "function") ? result : instance;
+  return result != null && (typeof result === 'object' || typeof result === 'function') ? result : instance;
 };
 
-var _toArray = function (arr) {
+var toArray = function (arr) {
   return Array.isArray(arr) ? arr : Array.from(arr);
 };
 
 export default ngModule => {
-
-  var directive = function (name, constructorFn) {
-    constructorFn = _normalizeConstructor(constructorFn);
-
-    if (!constructorFn.prototype.compile) {
-      // create an empty compile function if none was defined.
-      constructorFn.prototype.compile = function () {
-      };
-    }
-
-    var originalCompileFn = _cloneFunction(constructorFn.prototype.compile);
-
-    // Decorate the compile method to automatically return the link method (if it exists)
-    // and bind it to the context of the constructor (so `this` works correctly).
-    // This gets around the problem of a non-lexical "this" which occurs when the directive class itself
-    // returns `this.link` from within the compile function.
-    _override(constructorFn.prototype, "compile", function () {
-      return function () {
-        originalCompileFn.apply(this, arguments);
-
-        if (constructorFn.prototype.link) {
-          return constructorFn.prototype.link.bind(this);
-        }
-      };
-    });
-
-    var factoryArray = _createFactoryArray(constructorFn);
-
-    app.directive(name, factoryArray);
-    return this;
-  };
-
-  var controller = function (name, contructorFn) {
-    app.controller(name, contructorFn);
-    return this;
-  };
-
-  var service = function (name, contructorFn) {
-    app.service(name, contructorFn);
-    return this;
-  };
-
-  var provider = function (name, constructorFn) {
-    app.provider(name, constructorFn);
-    return this;
-  };
-
-  var factory = function (name, constructorFn) {
-    constructorFn = _normalizeConstructor(constructorFn);
-    var factoryArray = _createFactoryArray(constructorFn);
-    app.factory(name, factoryArray);
-    return this;
-  };
 
   /**
    * If the constructorFn is an array of type ['dep1', 'dep2', ..., constructor() {}]
@@ -79,7 +26,7 @@ export default ngModule => {
    * @returns {*}
    * @private
    */
-  var _normalizeConstructor = function (input) {
+  var normalizeConstructor = function (input) {
     var constructorFn;
 
     if (input.constructor === Array) {
@@ -105,18 +52,18 @@ export default ngModule => {
    * @returns {Array.<T>}
    * @private
    */
-  var _createFactoryArray = function (constructorFn) {
+  var createFactoryArray = function (constructorFn) {
     // get the array of dependencies that are needed by this component (as contained in the `$inject` array)
-    var args = constructorFn.$inject || [];
-    var factoryArray = args.slice(); // create a copy of the array
+    var a = constructorFn.$inject || [];
+    var factoryArray = a.slice(); // create a copy of the array
     // The factoryArray uses Angular's array notation whereby each element of the array is the name of a
     // dependency, and the final item is the factory function itself.
     factoryArray.push(function () {
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+      for (var len = arguments.length, args = Array(len), key = 0; key < len; key++) {
+        args[key] = arguments[key];
       }
 
-      return _applyConstructor(constructorFn, _toArray(args));
+      return applyConstructor(constructorFn, toArray(args));
     });
 
     return factoryArray;
@@ -127,7 +74,7 @@ export default ngModule => {
    * @param original
    * @returns {Function}
    */
-  var _cloneFunction = function (original) {
+  var cloneFunction = function (original) {
     return function () {
       return original.apply(this, arguments);
     };
@@ -139,11 +86,64 @@ export default ngModule => {
    * @param methodName
    * @param callback
    */
-  var _override = function (object, methodName, callback) {
+  var override = function (object, methodName, callback) {
     object[methodName] = callback(object[methodName]);
   };
 
   var app = ngModule;
+
+  var directive = function (name, constructorFunc) {
+    var constructorFn = normalizeConstructor(constructorFunc);
+
+    if (!constructorFn.prototype.compile) {
+      // create an empty compile function if none was defined.
+      constructorFn.prototype.compile = function () {
+      };
+    }
+
+    var originalCompileFn = cloneFunction(constructorFn.prototype.compile);
+
+    // Decorate the compile method to automatically return the link method (if it exists)
+    // and bind it to the context of the constructor (so `this` works correctly).
+    // This gets around the problem of a non-lexical 'this' which occurs when the directive class itself
+    // returns `this.link` from within the compile function.
+    override(constructorFn.prototype, 'compile', function () {
+      return function () {
+        originalCompileFn.apply(this, arguments);
+
+        if (constructorFn.prototype.link) {
+          return constructorFn.prototype.link.bind(this);
+        }
+      };
+    });
+
+    var factoryArray = createFactoryArray(constructorFn);
+
+    app.directive(name, factoryArray);
+    return this;
+  };
+
+  var controller = function (name, contructorFn) {
+    app.controller(name, contructorFn);
+    return this;
+  };
+
+  var service = function (name, contructorFn) {
+    app.service(name, contructorFn);
+    return this;
+  };
+
+  var provider = function (name, constructorFn) {
+    app.provider(name, constructorFn);
+    return this;
+  };
+
+  var factory = function (name, constructorFn) {
+    var constructorFunc = normalizeConstructor(constructorFn);
+    var factoryArray = createFactoryArray(constructorFunc);
+    app.factory(name, factoryArray);
+    return this;
+  };
 
   return {
     directive: directive,
@@ -152,4 +152,4 @@ export default ngModule => {
     provider: provider,
     factory: factory
   };
-}
+};

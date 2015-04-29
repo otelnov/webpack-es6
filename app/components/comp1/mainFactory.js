@@ -10,5 +10,4 @@ class MainFactory {
 export default ngModule => {
   let register = require('../../register')(ngModule);
   register.factory('MainFactory', MainFactory);
-}
-
+};

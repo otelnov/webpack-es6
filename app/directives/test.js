@@ -5,7 +5,6 @@ class Test {
     this.template = require('./test.html');
     this.controllerAs = 'vm';
     this.controller = function () {
-      console.log('directive ctrl');
       const vm = this;
       vm.test = 'ladirective';
     };
@@ -15,5 +14,5 @@ class Test {
 export default ngModule => {
   require('./test.css');
   let register = require('../register')(ngModule);
-  register.directive('test', Test)
-}
+  register.directive('test', Test);
+};
